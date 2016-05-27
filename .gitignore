@@ -1,0 +1,16 @@
+*.a
+*.o
+*.oo
+*.so
+*.lo
+*.la
+*.mod
+*~
+*.swp
+*.swo
+*.Plo
+*.pyc
+*.png
+.nfs*
+
+bin
