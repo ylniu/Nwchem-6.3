@@ -1,0 +1,71 @@
+#!/bin/sh
+#------------------------------------------------------------------------------
+export TCGRSH="/usr/bin/ssh"
+export LARGE_FILES="TRUE"
+export USE_NOFSCHECK="TRUE"
+#export LIB_DEFINES="-DDFLT_TOT_MEM=16106127360"
+export NWCHEM_MODULES="all venus geninterface"
+#------------------------------------------------------------------------------
+export NWCHEM_TOP=`pwd`
+export NWCHEM_EXECUTABLE="$NWCHEM_TOP/bin/LINUX64/nwchem"
+export TARGET="LINUX64"
+export NWCHEM_TARGET="LINUX64"
+export NWCHEM_TARGET_CPU="x86_64"
+#------------------------------------------------------------------------------
+# intel c, for, & mkl
+#
+#export INTEL=$HOME/compilers/intel/composer_xe_2013.4.183
+#export INTEL=/opt/intel/composer_xe_2011_sp1.11.339
+#export MKL_PATH=$INTEL/mkl
+#source $INTEL/bin/ifortvars.sh intel64
+#source $INTEL/bin/iccvars.sh intel64
+#------------------------------------------------------------------------------
+export USE_OPENMP=yes
+#------------------------------------------------------------------------------
+# compilation settings
+#export MPI_LOC="$HOME/program/mpich/mpich2-1.4.1p1"
+#export MPI_LOC="/opt/mpich2"
+#export MPI_LOC="/opt/mpich2-1.4.1p1-intel-11.1"
+export MPI_LOC="$HOME/program/mpich/mpich2-1.5-ifort-2011_usr_gcc"
+export MPI_HOME=$MPI_LOC
+export PATH="$MPI_HOME/bin:$PATH"
+export CC="$MPI_HOME/bin/mpicc"
+export CXX="$MPI_HOME/bin/mpicxx"
+export F77="$MPI_HOME/bin/mpif77"
+export F90="$MPI_HOME/bin/mpif90"
+export FC="$MPI_HOME/bin/mpif90"
+export FL="$MPI_HOME/bin/mpif90"
+export FOPTIMIZE="-O3 -msse4.1 -xSSE4.1"
+export COPTIMIZE="-O3 -msse4.1 -xSSE4.1"
+#------------------------------------------------------------------------------
+export USE_MPI="yes"
+export USE_MPIF="yes"
+export MSG_COMMS="MPI"
+export MPI_LIB="$MPI_LOC/lib"
+export MPI_INCLUDE="$MPI_LOC/include"
+#export LIBIRC="$INTEL/compiler/lib/intel64/libirc.a"
+export LIBMPI="-lmpich"
+#------------------------------------------------------------------------------
+cd $NWCHEM_TOP/src
+make realclean
+#------------------------------------------------------------------------------
+# Config
+# make nwchem_config >&1 | tee kkconfig
+#------------------------------------------------------------------------------
+# Make
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="eetrans" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="ddscf" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="gradients ddscf nwdft property"     >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="ddscf"     >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="nwdft ebridge" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="etrans" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="task" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="inp" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="ebridge" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="monomer" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="input" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="mcscf" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="tools ddscf selci" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="ddscf" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="geom" >&1 | tee kkmake
+#make FC=mpif90 FOPTIMIZE="-O3" >&1 | tee kkmake

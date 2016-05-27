@@ -1,0 +1,50 @@
+make -C config -f make_nwchem_config NWCHEM_MODULES="all venus geninterface"
+echo \# This configuration generated automatically on \
+	      `hostname` at `date` > nwchem_config.h
+echo "# Request modules from user: all venus geninterface" >> nwchem_config.h
+echo "NW_MODULE_SUBDIRS = NWints atomscf ddscf gradients moints nwdft nwxc rimp2 stepper driver optim cphf ccsd vib mcscf prepar esp hessian selci dplot mp2_grad qhop property nwpw fft analyz nwmd cafe space drdy vscf qmmm qmd etrans eetrans ebridge tce geninterface bq cons perfm dntmc dangchang ccca" >> nwchem_config.h
+echo "NW_MODULE_LIBS = -lccsd -lmcscf -lselci -lmp2 -lmoints -lstepper -ldriver -loptim -lnwdft -lgradients -lcphf -lesp -lddscf -ldangchang -lguess -lhessian -lvib -lnwcutil -lrimp2 -lproperty -lnwints -lprepar -lnwmd -lnwpw -lofpw -lpaw -lpspw -lband -lnwpwlib -lnwxc -lcafe -lspace -lanalyze -lqhop -lpfft -ldplot -ldrdy -lvscf -lqmmm -lqmd -letrans -leetrans -lebridge -lpspw -ltce -lgeninterface -lbq -lcons -lperfm -ldntmc -lccca" >> nwchem_config.h
+echo "EXCLUDED_SUBDIRS = develop scfaux plane_wave oimp2 rimp2_grad python argos diana uccsdt rism transport smd nbo leps" >> nwchem_config.h
+echo "CONFIG_LIBS = " >> nwchem_config.h
+echo \# This configuration generated automatically on \
+	     `hostname` at `date` > NWCHEM_CONFIG
+echo "# Request modules from user: all venus geninterface" >> NWCHEM_CONFIG
+echo The following subdirectories are built: >> NWCHEM_CONFIG 
+echo NWints analyz atomscf bq cafe ccca ccsd cons cphf dangchang ddscf dntmc dplot drdy driver ebridge eetrans esp etrans fft geninterface gradients hessian mcscf moints mp2_grad nwdft nwmd nwpw nwxc optim perfm prepar property qhop qmd qmmm rimp2 selci space stepper symmetry tce vib vscf >> NWCHEM_CONFIG 
+echo corresponding to these libraries: >> NWCHEM_CONFIG 
+echo -lnwints -lanalyze -lguess -lbq -lcafe -lccca -lccsd -lcons -lcphf -ldangchang -lddscf -ldntmc -ldplot -ldrdy -ldriver -lebridge -leetrans -lesp -letrans -lpfft -lgeninterface -lgradients -lhessian -lmcscf -lmoints -lmp2 -lnwdft -lnwxc -lnwmd -lnwpw -lofpw -lpaw -lpspw -lband -lnwpwlib -lnwxc nwxc -loptim -lperfm -lprepar -lproperty -lqhop -lqmd -lqmmm -lrimp2 -lselci -lspace -lstepper -lnwcutil -ltce -lvib -lvscf >> NWCHEM_CONFIG 
+echo >> NWCHEM_CONFIG 
+echo The following directories are excluded from the build: >> NWCHEM_CONFIG 
+echo develop scfaux plane_wave oimp2 rimp2_grad python argos diana uccsdt rism transport smd nbo leps >> NWCHEM_CONFIG 
+echo and these routines will be replaced by stubs: >> NWCHEM_CONFIG 
+echo argos argos_input crossing debtest dia_input diana gasdev jantest jvltest jvltest2 kgdtest leps_energy leps_gradient mc_data mc_driver mc_init mc_main md_data md_driver md_set moints_screen mymc_input mymd_input nbo_input oimp2 player plnwv plnwv_input python_input raktest rimp2g rism_input rjhtest smd_input task_fragment_energy task_nbo task_python task_rism task_smd task_smd_dynamics task_smd_energy task_smd_fragment transp_input transport uccsdt uccsdtest urand  >> NWCHEM_CONFIG 
+echo "No extra configuration libraries were added " >> NWCHEM_CONFIG
+cp census.skeleton ../stubs.F 
+for routine in argos argos_input crossing debtest dia_input diana gasdev jantest jvltest jvltest2 kgdtest leps_energy leps_gradient mc_data mc_driver mc_init mc_main md_data md_driver md_set moints_screen mymc_input mymd_input nbo_input oimp2 player plnwv plnwv_input python_input raktest rimp2g rism_input rjhtest smd_input task_fragment_energy task_nbo task_python task_rism task_smd task_smd_dynamics task_smd_energy task_smd_fragment transp_input transport uccsdt uccsdtest urand; do \
+	   sed s/STUBROUTINE/$routine/g stub.skeleton >> ../stubs.F ; \
+	done
+make -C config -f make_nwchem_config NWCHEM_MODULES="all venus geninterface"
+echo \# This configuration generated automatically on \
+	      `hostname` at `date` > nwchem_config.h
+echo "# Request modules from user: all venus geninterface" >> nwchem_config.h
+echo "NW_MODULE_SUBDIRS = NWints atomscf ddscf gradients moints nwdft nwxc rimp2 stepper driver optim cphf ccsd vib mcscf prepar esp hessian selci dplot mp2_grad qhop property nwpw fft analyz nwmd cafe space drdy vscf qmmm qmd etrans eetrans ebridge tce geninterface bq cons perfm dntmc dangchang ccca" >> nwchem_config.h
+echo "NW_MODULE_LIBS = -lccsd -lmcscf -lselci -lmp2 -lmoints -lstepper -ldriver -loptim -lnwdft -lgradients -lcphf -lesp -lddscf -ldangchang -lguess -lhessian -lvib -lnwcutil -lrimp2 -lproperty -lnwints -lprepar -lnwmd -lnwpw -lofpw -lpaw -lpspw -lband -lnwpwlib -lnwxc -lcafe -lspace -lanalyze -lqhop -lpfft -ldplot -ldrdy -lvscf -lqmmm -lqmd -letrans -leetrans -lebridge -lpspw -ltce -lgeninterface -lbq -lcons -lperfm -ldntmc -lccca" >> nwchem_config.h
+echo "EXCLUDED_SUBDIRS = develop scfaux plane_wave oimp2 rimp2_grad python argos diana uccsdt rism transport smd nbo leps" >> nwchem_config.h
+echo "CONFIG_LIBS = " >> nwchem_config.h
+echo \# This configuration generated automatically on \
+	     `hostname` at `date` > NWCHEM_CONFIG
+echo "# Request modules from user: all venus geninterface" >> NWCHEM_CONFIG
+echo The following subdirectories are built: >> NWCHEM_CONFIG 
+echo NWints analyz atomscf bq cafe ccca ccsd cons cphf dangchang ddscf dntmc dplot drdy driver ebridge eetrans esp etrans fft geninterface gradients hessian mcscf moints mp2_grad nwdft nwmd nwpw nwxc optim perfm prepar property qhop qmd qmmm rimp2 selci space stepper symmetry tce vib vscf >> NWCHEM_CONFIG 
+echo corresponding to these libraries: >> NWCHEM_CONFIG 
+echo -lnwints -lanalyze -lguess -lbq -lcafe -lccca -lccsd -lcons -lcphf -ldangchang -lddscf -ldntmc -ldplot -ldrdy -ldriver -lebridge -leetrans -lesp -letrans -lpfft -lgeninterface -lgradients -lhessian -lmcscf -lmoints -lmp2 -lnwdft -lnwxc -lnwmd -lnwpw -lofpw -lpaw -lpspw -lband -lnwpwlib -lnwxc nwxc -loptim -lperfm -lprepar -lproperty -lqhop -lqmd -lqmmm -lrimp2 -lselci -lspace -lstepper -lnwcutil -ltce -lvib -lvscf >> NWCHEM_CONFIG 
+echo >> NWCHEM_CONFIG 
+echo The following directories are excluded from the build: >> NWCHEM_CONFIG 
+echo develop scfaux plane_wave oimp2 rimp2_grad python argos diana uccsdt rism transport smd nbo leps >> NWCHEM_CONFIG 
+echo and these routines will be replaced by stubs: >> NWCHEM_CONFIG 
+echo argos argos_input crossing debtest dia_input diana gasdev jantest jvltest jvltest2 kgdtest leps_energy leps_gradient mc_data mc_driver mc_init mc_main md_data md_driver md_set moints_screen mymc_input mymd_input nbo_input oimp2 player plnwv plnwv_input python_input raktest rimp2g rism_input rjhtest smd_input task_fragment_energy task_nbo task_python task_rism task_smd task_smd_dynamics task_smd_energy task_smd_fragment transp_input transport uccsdt uccsdtest urand  >> NWCHEM_CONFIG 
+echo "No extra configuration libraries were added " >> NWCHEM_CONFIG
+cp census.skeleton ../stubs.F 
+for routine in argos argos_input crossing debtest dia_input diana gasdev jantest jvltest jvltest2 kgdtest leps_energy leps_gradient mc_data mc_driver mc_init mc_main md_data md_driver md_set moints_screen mymc_input mymd_input nbo_input oimp2 player plnwv plnwv_input python_input raktest rimp2g rism_input rjhtest smd_input task_fragment_energy task_nbo task_python task_rism task_smd task_smd_dynamics task_smd_energy task_smd_fragment transp_input transport uccsdt uccsdtest urand; do \
+	   sed s/STUBROUTINE/$routine/g stub.skeleton >> ../stubs.F ; \
+	done

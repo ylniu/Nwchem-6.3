@@ -1,0 +1,165 @@
+#!/bin/bash
+#
+# Doxygen run script for NWChem
+#
+# Doxygen is a source code documentation tool. It interprets and analyses
+# the source code and writes a substantial chunk of documentation. The 
+# documentation can be enriched by providing more details in comment lines.
+# Doxygen is the defacto standard approach to documenting C-code. 
+#
+function usage()
+{
+   echo
+   echo " Usage: $0 [-h] [-g] [-t] [-m] [-s] [-u] [-v] [-j]"
+   echo
+   cat <<EOF
+ This script runs doxygen building a particular version of the NWChem source
+ code documentation. The command can be run in any directory and produces the
+ documentation in the directory ./doxydocs .
+
+ The command line flags are:
+
+ -h Show this information
+
+ -g Generate the full NWChem documentation, including various graphs such
+    as call trees, include trees, caller trees, etc. This is most useful
+    when information about how the code is put together is required.
+    This level of documentation takes the longest to generate and requires
+    the most disk space (about 80 minutes and generating around 4 GB of HTML).
+
+ -t (Default) Generate text only NWChem documentation. No graphs are generated
+    but headers and comments are included. This level of documentation is
+    useful when the information about how to use a module is required.
+    (Takes about 15 minutes and generates 300 MB of HTML).
+
+ -m Generate NWChem manpages. This is similar to the text only documentation
+    except that this documentation is formatted as UNIX manpages. This 
+    documentation is relatively compact (takes about 10 minutes and generates
+    around 200 MB).
+
+ -s Generate the NWChem documentation including the full source code. The
+    source code is formatted in HTML with cross-references between the
+    documentation and source code. This is likely to get big but might be
+    useful in figuring out how Doxygen interprets a piece of source code.
+    (This takes about 15 minutes and generates about 1 GB of documentation).
+
+ -u Update the Doxygen configurations files to a newer version of Doxygen.
+
+ -v Print the version information from the configuration files, Doxygen,
+    and the GraphViz dot program.
+
+ -j Enable MathJax to display equations. MathJax is a JavaScript display engine
+    that displays equations in your browser without needing any readers or
+    plugins. Because it processes equations in your browser the speed will 
+    depend on your machine performance and your browser. For example Internet
+    Explorer 8 took minutes to process a page and was unusably slow afterwards,
+    whereas Firefox 16 processed the same page in seconds and displayed without
+    noticable degradation.
+
+EOF
+}
+if [ -f "$0" ] ; then
+   # The first item on the command line is an actual file so it must have
+   # been specified including the path.
+   path="`dirname \"$0\"`"
+else
+   # The first item on the command line is not a file so it must have been
+   # found in PATH.
+   path="`which \"$0\"`"
+   path="`dirname \"$path\"`"
+fi
+task="text"
+if [ $# -gt 2 ] ; then
+  usage
+  exit 1
+fi
+while [ $# -ge 1 ] ; do
+  case $1 in
+    -h) task="help" ; shift 1 ;;
+    -g) task="graph" ; shift 1 ;;
+    -t) task="text" ; shift 1 ;;
+    -m) task="man" ; shift 1 ;;
+    -s) task="src" ; shift 1 ;;
+    -u) task="update" ; shift 1 ;;
+    -v) task="version" ; shift 1 ;;
+    -j) mjax="yes" ; shift 1 ;;
+    *)  task="usage" ; shift 1 ;;
+  esac
+done
+#
+# Now we need to do something about the Doxygen configuration with respect to
+# the locations of the include files. We cannot point to the common include
+# directory as Doxygen will also find the include files in the source code
+# directories. When Doxygen finds the same entities twice it gets confused
+# and rejects all copies. So we need to find the include files in the source
+# code directories, work out the set of unique directories they live in, and
+# insert this into the Doxygen configuration file. After that we can invoke
+# Doxygen itself.
+#
+echo "configuring Doxygen..."
+echo "finding paths for include files..."
+includedirs=`find "${path}/../../src" -name "*.*h" -print `
+touch doxy$$.tmp
+for file in $includedirs ; do
+   echo `dirname $file` >> doxya$$.tmp
+done
+grep -v "src/include" doxya$$.tmp | grep -v "install/include" | grep -v "tools/include" | sort -u > doxyb$$.tmp
+includedirs=`cat doxyb$$.tmp`
+echo "adding the include files paths:"
+cat doxyb$$.tmp
+rm -f doxya$$.tmp doxyb$$.tmp
+#
+if [ "$task" == "help" ] ; then
+  usage
+  exit 0
+elif [ "$task" == "graph" ] ; then
+  date
+  grep -v "INCLUDE_PATH           =" "$path/doxygen.rc" > "$path/doxygen$$.rc"
+  echo "INCLUDE_PATH           =" $includedirs >> "$path/doxygen$$.rc"
+  if [ ${#mjax} -ne 0 ] ; then
+    echo "USE_MATHJAX            = YES"  >> "$path/doxygen$$.rc"
+  fi
+  doxygen "$path/doxygen$$.rc"
+  rm -f "$path/doxygen$$.rc"
+  date
+elif [ "$task" == "text" ] ; then
+  date
+  grep -v "INCLUDE_PATH           =" "$path/doxygen-text.rc" > "$path/doxygen-text$$.rc"
+  echo "INCLUDE_PATH           =" $includedirs >> "$path/doxygen-text$$.rc"
+  if [ ${#mjax} -ne 0 ] ; then
+    echo "USE_MATHJAX            = YES"  >> "$path/doxygen-text$$.rc"
+  fi
+  doxygen "$path/doxygen-text$$.rc"
+  rm -f "$path/doxygen-text$$.rc"
+  date
+elif [ "$task" == "man" ] ; then
+  date
+  grep -v "INCLUDE_PATH           =" "$path/doxygen-manpage.rc" > "$path/doxygen-manpage$$.rc"
+  echo "INCLUDE_PATH           =" $includedirs >> "$path/doxygen-manpage$$.rc"
+  doxygen "$path/doxygen-manpage$$.rc"
+  rm -f "$path/doxygen-manpage$$.rc"
+  date
+elif [ "$task" == "src" ] ; then
+  date
+  grep -v "INCLUDE_PATH           =" "$path/doxygen-src.rc" > "$path/doxygen-src$$.rc"
+  echo "INCLUDE_PATH           =" $includedirs >> "$path/doxygen-src$$.rc"
+  if [ ${#mjax} -ne 0 ] ; then
+    echo "USE_MATHJAX            = YES"  >> "$path/doxygen-src$$.rc"
+  fi
+  doxygen "$path/doxygen-src$$.rc"
+  rm -f "$path/doxygen-src$$.rc"
+  date
+elif [ "$task" == "update" ] ; then
+  doxygen -u "$path/doxygen.rc"
+  doxygen -u "$path/doxygen-src.rc"
+  doxygen -u "$path/doxygen-text.rc"
+  doxygen -u "$path/doxygen-manpage.rc"
+elif [ "$task" == "version" ] ; then
+  grep Doxyfile "$path"/*.rc
+  echo -n "Doxygen "; doxygen --version
+  dot -V 2>&1 cat
+else
+  usage
+  exit 1
+fi
+exit 0
