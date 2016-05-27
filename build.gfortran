@@ -47,10 +47,10 @@ export MPI_INCLUDE="$MPI_LOC/include"
 export LIBMPI="-lmpich"
 #------------------------------------------------------------------------------
 cd $NWCHEM_TOP/src
-make realclean
+# make realclean
 #------------------------------------------------------------------------------
 # Config
-# make nwchem_config >&1 | tee kkconfig
+make nwchem_config >&1 | tee kkconfig
 #------------------------------------------------------------------------------
 # Make
 #make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="eetrans" >&1 | tee kkmake
@@ -68,4 +68,4 @@ make realclean
 #make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="tools ddscf selci" >&1 | tee kkmake
 #make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="ddscf" >&1 | tee kkmake
 #make FC=mpif90 FOPTIMIZE="-O3" NW_MODULE_SUBDIRS="geom" >&1 | tee kkmake
-#make FC=mpif90 FOPTIMIZE="-O3" >&1 | tee kkmake
+make FC=mpif90 FOPTIMIZE="-O3" >&1 | tee kkmake
